@@ -1,35 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const AddTodo = ({ addTodo }) => {
-  const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
+const AddTodo = ({ addTodo, editingTodo }) => {
+  const [title, setTitle] = useState('');
+  const [desc, setDesc] = useState('');
 
-  const submit = (e) => {
+  useEffect(() => {
+    if (editingTodo) {
+      setTitle(editingTodo.title);
+      setDesc(editingTodo.desc);
+    } else {
+      setTitle('');
+      setDesc('');
+    }
+  }, [editingTodo]);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!title || !desc) {
-      alert("Title or Description cannot be blank");
+      alert('Please fill out both fields!');
       return;
     }
     addTodo(title, desc);
-    setTitle("");
-    setDesc("");
+    setTitle('');
+    setDesc('');
   };
 
   return (
-    <div className="container my-3">
-      <h3>Add a Todo</h3>
-      <form onSubmit={submit}>
-        <div className="mb-3">
-          <label className="form-label">Todo Title</label>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="form-control" />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Todo Description</label>
-          <input type="text" value={desc} onChange={(e) => setDesc(e.target.value)} className="form-control" />
-        </div>
-        <button type="submit" className="btn btn-success btn-sm">Add Todo</button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit} className="mb-4 p-3 bg-light rounded shadow-sm" autoComplete="off">
+      <h4 className="mb-3">{editingTodo ? 'Edit Todo' : 'Add Todo'}</h4>
+
+      <div className="mb-3">
+        <label htmlFor="title" className="form-label">Todo Title</label>
+        <input
+          type="text"
+          className="form-control rounded"
+          id="title"
+          placeholder="Enter title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          autoComplete="off"
+        />
+      </div>
+
+      <div className="mb-3">
+        <label htmlFor="desc" className="form-label">Todo Description</label>
+        <input
+          type="text"
+          className="form-control rounded"
+          id="desc"
+          placeholder="Enter description"
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
+          autoComplete="off"
+        />
+      </div>
+
+      <button className="btn btn-primary w-10" type="submit">
+        {editingTodo ? 'Update Todo' : 'Add Todo'}
+      </button>
+    </form>
   );
 };
 
