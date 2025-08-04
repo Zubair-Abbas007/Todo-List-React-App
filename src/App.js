@@ -26,6 +26,15 @@ function App() {
         <AddTodo addTodo={addTodo} />
         <Todos todos={todos} onDelete={onDelete} />
         <Footer />
+
+        {/* 👇 About Section */}
+        <div id="about" className="mt-5">
+          <h2>About This App</h2>
+          <p>
+            This is a simple React Todo List App made using React and Bootstrap.
+            You can add and delete tasks easily. It's a beginner-friendly project that helps you learn React components, props, and state management.
+          </p>
+        </div>
       </div>
     </>
   );
