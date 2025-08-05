@@ -8,12 +8,12 @@ const NavScrollExample = ({
   handleClearSearch
 }) => {
   return (
-   <nav
-  className="navbar navbar-light bg-light my-3"
-  style={{ height: '80px', padding: '20px 10px' }}
->
+    <nav
+      className="navbar navbar-light bg-light my-3"
+      style={{ height: '80px', padding: '20px 10px' }}
+    >
       <div className="container-fluid" style={{ paddingLeft: '20px', paddingRight: '50px' }}>
-        <span className="navbar-brand mb-0 h1">Todo List</span>
+        <span className="navbar-brand mb-0 h1">Todo List App</span>
         <div className="d-flex">
           <input
             className="form-control me-2"

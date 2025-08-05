@@ -1,67 +1,130 @@
-import React, { useState } from 'react';
-import './App.css';
+import React, { useState, useEffect } from 'react';
 import AddTodo from './MyComponents/AddTodo';
 import Todos from './MyComponents/Todos';
 import NavScrollExample from './NavScrollExample';
 
-
 function App() {
   const [todos, setTodos] = useState([]);
-  const [editingTodo, setEditingTodo] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+  const [currentTodo, setCurrentTodo] = useState(null);
+
+  // 🔍 Search-related states
   const [searchText, setSearchText] = useState('');
-  const [filteredTodos, setFilteredTodos] = useState(null); // null = show all
   const [isSearchActive, setIsSearchActive] = useState(false);
 
-  const addTodo = (title, desc) => {
-    if (editingTodo) {
-      const updatedTodos = todos.map((todo) =>
-        todo === editingTodo ? { title, desc } : todo
+  useEffect(() => {
+    const savedTodos = JSON.parse(localStorage.getItem('todos')) || [];
+    setTodos(savedTodos);
+  }, []);
+
+  const addOrUpdateTodo = (title, desc) => {
+    if (editMode && currentTodo) {
+      const updatedTodos = todos.map(todo =>
+        todo.id === currentTodo.id ? { ...todo, title, desc } : todo
       );
       setTodos(updatedTodos);
-      setEditingTodo(null);
+      localStorage.setItem('todos', JSON.stringify(updatedTodos));
+      setEditMode(false);
+      setCurrentTodo(null);
     } else {
-      setTodos([...todos, { title, desc }]);
+      const newTodo = {
+        id: Date.now(),
+        title,
+        desc,
+        completed: false,
+      };
+      const updatedTodos = [...todos, newTodo];
+      setTodos(updatedTodos);
+      localStorage.setItem('todos', JSON.stringify(updatedTodos));
     }
   };
 
-  const handleEdit = (todo) => setEditingTodo(todo);
-
-  const handleDelete = (todoToDelete) =>
-    setTodos(todos.filter((todo) => todo !== todoToDelete));
-
-  // ✅ Search only on button click
-  const handleSearch = () => {
-    const results = todos.filter((todo) =>
-      todo.title.toLowerCase().includes(searchText.toLowerCase()) ||
-      todo.desc.toLowerCase().includes(searchText.toLowerCase())
-    );
-    setFilteredTodos(results);
-    setIsSearchActive(true);
+  const handleDelete = (todo) => {
+    const updatedTodos = todos.filter(t => t.id !== todo.id);
+    setTodos(updatedTodos);
+    localStorage.setItem('todos', JSON.stringify(updatedTodos));
   };
 
-  // ✅ Back to full list
+  const handleToggleComplete = (toggledTodo) => {
+    const updatedTodos = todos.map(todo =>
+      todo.id === toggledTodo.id
+        ? { ...todo, completed: !todo.completed }
+        : todo
+    );
+    setTodos(updatedTodos);
+    localStorage.setItem('todos', JSON.stringify(updatedTodos));
+  };
+
+  const handleEdit = (todoToEdit) => {
+    setEditMode(true);
+    setCurrentTodo(todoToEdit);
+  };
+
+  // ✅ Filter logic based on search
+  const filteredTodos = isSearchActive
+    ? todos.filter(todo =>
+        todo.title.toLowerCase().includes(searchText.toLowerCase())
+      )
+    : todos;
+
+  const completedTodos = filteredTodos.filter(todo => todo.completed);
+  const incompleteTodos = filteredTodos.filter(todo => !todo.completed);
+
+  // 🔍 Search Handlers
+  const handleSearch = () => {
+    if (searchText.trim() !== '') {
+      setIsSearchActive(true);
+    }
+  };
+
   const handleClearSearch = () => {
-    setFilteredTodos(null);
     setSearchText('');
     setIsSearchActive(false);
   };
 
   return (
-    <div className="container my-3">
+    <>
+      {/* ✅ Pass search props */}
       <NavScrollExample
         searchText={searchText}
         setSearchText={setSearchText}
         handleSearch={handleSearch}
-        isSearchActive={isSearchActive}
         handleClearSearch={handleClearSearch}
+        isSearchActive={isSearchActive}
       />
-      <AddTodo addTodo={addTodo} editingTodo={editingTodo} />
-      <Todos
-        todos={filteredTodos !== null ? filteredTodos : todos}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
-    </div>
+
+      <div className="container my-4">
+        <h2 className="text-center">Todo List</h2>
+
+        <AddTodo
+          addOrUpdateTodo={addOrUpdateTodo}
+          editMode={editMode}
+          currentTodo={currentTodo}
+        />
+
+        <div className="row mt-4">
+          <div className="col-md-6">
+            <h4>📝 Incomplete Tasks</h4>
+            <Todos
+              todos={incompleteTodos}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onToggleComplete={handleToggleComplete}
+            />
+          </div>
+
+          <div className="col-md-6">
+            <h4>✅ Completed Tasks</h4>
+            <Todos
+              todos={completedTodos}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onToggleComplete={handleToggleComplete}
+            />
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 
