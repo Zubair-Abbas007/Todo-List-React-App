@@ -1,24 +1,24 @@
-📝 Todo List React App
+📝 Todo List React App<br>
 
-This is a simple and responsive **Todo List** application built using **React**. It allows users to:
+This is a simple and responsive **Todo List** application built using **React**. It allows users to:<br>
 
-✅ Add new tasks
-🗑️ Delete tasks
-📋 View the full list of todos
+✅ Add new tasks<br>
+🗑️ Delete tasks<br>
+📋 View the full list of todos<br>
 
-This project is ideal for beginners learning React fundamentals like state, props, and components.
+This project is ideal for beginners learning React fundamentals like state, props, and components.<br>
 
-🚀 Features
+🚀 Features<br>
 
-Add and display todo items dynamically
-Reusable React components
-Styled using Bootstrap (optional)
-Clean and minimal UI
+Add and display todo items dynamically<br>
+Reusable React components<br>
+Styled using Bootstrap (optional)<br>
+Clean and minimal UI<br>
 
-📦 Technologies Used
+📦 Technologies Used<br>
 
-React (with JSX)
-JavaScript 
-HTML/CSS
-Bootstrap
+React (with JSX)<br>
+JavaScript<br> 
+HTML/CSS<br>
+Bootstrap<br>
 Git & GitHub
