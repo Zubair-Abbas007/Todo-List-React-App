@@ -2,12 +2,9 @@
 
 This is a simple and responsive **Todo List** application built using **React**. It allows users to:<br>
 
-Add new todos<br>
-Delete todos<br>
-Edit todos<br>
-View the full list of todos<br>
-Search todos<br>
-View completed and incomplete todos separately<br>
+Add, edit and delete todos<br>
+Mark todos as **Completed** or **Incomplete**<br>
+Search through your todo list<br>
 
 This project is ideal for beginners learning React fundamentals like state, props, and components.<br>
 
